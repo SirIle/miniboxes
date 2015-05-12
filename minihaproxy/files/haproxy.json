@@ -1,0 +1,6 @@
+consul = "consul.service.consul:8500"
+template {
+  source = "/tmp/haproxy.ctmpl"
+  destination = "/etc/haproxy/haproxy.cfg"
+  command = "haproxy -f /etc/haproxy/haproxy.cfg -p /var/run/haproxy.pid -d -D -sf $(cat /var/run/haproxy.pid)"
+}
