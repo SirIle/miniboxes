@@ -1,6 +1,6 @@
 global
     daemon
-    #maxconn {{key "service/haproxy/maxconn"}}
+    maxconn {{with $maxconn:=key "service/haproxy/maxconn"}}{{$maxconn}}{{else}}4096{{end}}
 
 defaults
     mode http{{range ls "service/haproxy/timeouts"}}
