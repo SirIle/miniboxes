@@ -17,6 +17,9 @@ frontend http-in
 
 {{range $i,$a:=services}}{{$path:=.Name}}{{range .Tags}}{{if eq . "rest"}}
 backend srvs_app{{$i}}
+    mode http
     balance roundrobin
+    option forwardfor
+    option httpchk HEAD / HTTP/1.1\r\nHost:localhost
     reqrep ^([^\ ]*\ /){{$path}}[/]?(.*)     \1\2{{range $c,$d:=service $a.Name}}
-    server host{{$c}} {{.Address}}:{{.Port}}{{end}}{{end}}{{end}}{{end}}
+    server host{{$c}} {{.Address}}:{{.Port}} check{{end}}{{end}}{{end}}{{end}}
