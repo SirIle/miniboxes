@@ -1,13 +1,19 @@
 global
-    daemon
+    log 127.0.0.1   local0
+    log 127.0.0.1   local1 notice
+    debug
+    stats timeout 30s
     maxconn {{with $maxconn:=key "service/haproxy/maxconn"}}{{$maxconn}}{{else}}4096{{end}}
 
 defaults
+    log global
+    option httplog
+    option dontlognull
     mode http{{range ls "service/haproxy/timeouts"}}
-    timeout {{.Key}} {{.Value}}{{end}}
-    stats enable
-    stats auth someuser:somepassword
-    stats uri /haproxyStats
+    timeout {{.Key}} {{.Value}}{{else}}
+    timeout connect 5000
+    timeout client  50000
+    timeout server  50000{{end}}
 
 frontend http-in
     bind *:80{{range $i,$a:=services}}{{$path:=.Name}}{{range .Tags}}{{if eq . "rest"}}
@@ -23,3 +29,9 @@ backend srvs_app{{$i}}
     option httpchk HEAD / HTTP/1.1\r\nHost:localhost
     reqrep ^([^\ ]*\ /){{$path}}[/]?(.*)     \1\2{{range $c,$d:=service $a.Name}}
     server host{{$c}} {{.Address}}:{{.Port}} check{{end}}{{end}}{{end}}{{end}}
+
+listen stats *:1936
+    stats enable
+    stats uri /
+    stats hide-version
+    stats auth someuser:password
