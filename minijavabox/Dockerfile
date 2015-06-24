@@ -6,6 +6,9 @@ RUN opkg-install wget
 
 # Get and install Java
 RUN ( wget --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" -O /tmp/jre.tar.gz http://download.oracle.com/otn-pub/java/jdk/8u45-b14/jre-8u45-linux-x64.tar.gz && \
+  echo '58486d7b16d7b21fbea7374adc109233  /tmp/jre.tar.gz' > checksum && \
+  md5sum -c checksum && \
+  rm checksum && \
   gunzip /tmp/jre.tar.gz && cd /opt && tar xf /tmp/jre.tar && rm /tmp/jre.tar && \
   rm -rf /opt/jdk/*src.zip \
            /opt/jdk/lib/missioncontrol \
