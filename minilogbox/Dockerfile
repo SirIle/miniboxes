@@ -1,8 +1,8 @@
 FROM progrium/busybox
-MAINTAINER Ilkka Anttonen version: 0.3
+MAINTAINER Ilkka Anttonen version: 0.4
 
-# Udate wget to support SSL
-RUN opkg-install wget
+# Udate wget to support SSL, also install bash as logstash now requires it
+RUN opkg-install wget bash
 
 RUN ( wget --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" -O /tmp/jre.tar.gz http://download.oracle.com/otn-pub/java/jdk/8u45-b14/jre-8u45-linux-x64.tar.gz && \
   echo '58486d7b16d7b21fbea7374adc109233  /tmp/jre.tar.gz' > checksum && \
@@ -38,15 +38,15 @@ COPY runsv /sbin/runsv
 COPY runsvdir /sbin/runsvdir
 
 # Install Elasticsearch
-RUN ( wget http://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.3.4.tar.gz -O /tmp/elasticsearch.tar.gz && gunzip /tmp/elasticsearch.tar.gz && cd /opt && tar xf /tmp/elasticsearch.tar && rm /tmp/elasticsearch.tar)
+RUN ( wget http://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.6.0.tar.gz -O /tmp/elasticsearch.tar.gz && gunzip /tmp/elasticsearch.tar.gz && cd /opt && tar xf /tmp/elasticsearch.tar && rm /tmp/elasticsearch.tar)
 
 # Install Logstash
-RUN ( wget http://download.elasticsearch.org/logstash/logstash/logstash-1.4.2.tar.gz -O /tmp/logstash.tar.gz && gunzip /tmp/logstash.tar.gz && cd /opt && tar xf /tmp/logstash.tar && rm /tmp/logstash.tar )
+RUN ( wget http://download.elasticsearch.org/logstash/logstash/logstash-1.5.1.tar.gz -O /tmp/logstash.tar.gz && gunzip /tmp/logstash.tar.gz && cd /opt && tar xf /tmp/logstash.tar && rm /tmp/logstash.tar )
 
 # Set the scripts in place
 COPY elasticsearch /etc/service/elasticsearch/run
 COPY logstash /etc/service/logstash/run
-COPY logstash-syslog.json /opt/logstash-1.4.2/logstash-syslog.json
+COPY logstash-syslog.json /opt/logstash-1.5.1/logstash-syslog.json
 
 # Expose the ports
 EXPOSE 5000 9200
