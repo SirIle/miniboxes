@@ -5,8 +5,8 @@ MAINTAINER Ilkka Anttonen version: 0.3
 RUN opkg-install wget
 
 # Get and install Java
-RUN ( wget --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" -O /tmp/jre.tar.gz http://download.oracle.com/otn-pub/java/jdk/8u45-b14/jre-8u45-linux-x64.tar.gz && \
-  echo '58486d7b16d7b21fbea7374adc109233  /tmp/jre.tar.gz' > checksum && \
+RUN ( wget --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" -O /tmp/jre.tar.gz http://download.oracle.com/otn-pub/java/jdk/8u51-b16/jre-8u51-linux-x64.tar.gz && \
+  echo '3c4e3ed6b1c61fe18b9a88ea8b2d9384  /tmp/jre.tar.gz' > checksum && \
   md5sum -c checksum && \
   rm checksum && \
   gunzip /tmp/jre.tar.gz && cd /opt && tar xf /tmp/jre.tar && rm /tmp/jre.tar && \
@@ -32,4 +32,4 @@ RUN ( wget --no-check-certificate --no-cookies --header "Cookie: oraclelicense=a
            /opt/jdk/jre/lib/amd64/libjfx*.so )
 
 # Link Java into use, wget-ssl updates libpthread which causes Java to break
-RUN ln -sf /lib/libpthread-2.18.so /lib/libpthread.so.0 && ln -s /opt/jre1.8.0_45/bin/java /usr/bin/java
+RUN ln -sf /lib/libpthread-2.18.so /lib/libpthread.so.0 && ln -s /opt/jre1.8.0_51/bin/java /usr/bin/java
