@@ -1,2 +1,0 @@
-#!/bin/sh
-/opt/logstash-1.5.1/bin/logstash -f /opt/logstash-1.5.1/logstash-syslog.json

@@ -1,4 +1,4 @@
 miniboxes
 =========
 
-Repository for self-contained BusyBox based containers.
+Repository for self-contained Alpine based containers.

@@ -1,14 +1,26 @@
 # Docker image to run Kibana on nginx
-FROM progrium/busybox
-MAINTAINER Ilkka Anttonen version: 0.2
+FROM alpine
+MAINTAINER Ilkka Anttonen version: 0.4
 
-RUN ( opkg-install libstdcpp && ln -s /lib/libc.so.0 /lib/libc.so )
+ENV KIBANA_VERSION=4.1.0
 
 # Install Kibana
-RUN ( wget --no-check-certificate http://download.elastic.co/kibana/kibana/kibana-4.1.0-linux-x64.tar.gz -O /tmp/kibana.tar.gz && gunzip /tmp/kibana.tar.gz && cd /opt && tar xf /tmp/kibana.tar && rm /tmp/kibana.tar)
+RUN ( mkdir /opt && \
+  wget http://download.elastic.co/kibana/kibana/kibana-${KIBANA_VERSION}-linux-x64.tar.gz -O /tmp/kibana.tar.gz && \
+  gunzip /tmp/kibana.tar.gz && \
+  cd /opt && \
+  tar xf /tmp/kibana.tar && \
+  rm /tmp/kibana.tar && \
+  rm -rf /opt/kibana-${KIBANA_VERSION}-linux-x64/node && \
+  ln -s /opt/kibana-${KIBANA_VERSION}-linux-x64/bin/kibana /usr/bin/kibana )
+
+# Override the provided node with a Alpine version
+RUN ( apk --update add nodejs && \
+  mkdir -p /opt/kibana-${KIBANA_VERSION}-linux-x64/node/bin && \
+  ln -s /usr/bin/node /opt/kibana-${KIBANA_VERSION}-linux-x64/node/bin/node )
 
 # Check how to preconfigure kibana to default to logstash dashboard
 
 # Start kibana, elasticsearch instance can be overridden
-ENTRYPOINT ["/opt/kibana-4.1.0-linux-x64/bin/kibana","-e"]
+ENTRYPOINT ["kibana","-e"]
 CMD ["localhost:9200"]
