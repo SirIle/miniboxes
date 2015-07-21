@@ -12,4 +12,5 @@ RUN ( wget --no-check-certificate https://github.com/hashicorp/consul-template/r
 COPY files/haproxy.json /tmp/haproxy.json
 COPY files/haproxy.ctmpl /tmp/haproxy.ctmpl
 
-CMD ["consul-template", "-config=/tmp/haproxy.json"]
+ENTRYPOINT ["consul-template","-config=/tmp/haproxy.json"]
+CMD ["-consul=consul.service.consul:8500"]

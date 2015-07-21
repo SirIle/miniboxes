@@ -1,4 +1,3 @@
-consul = "consul.service.consul:8500"
 template {
   source = "/tmp/haproxy.ctmpl"
   destination = "/etc/haproxy/haproxy.cfg"
