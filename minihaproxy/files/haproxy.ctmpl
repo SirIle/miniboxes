@@ -30,7 +30,8 @@ backend srvs_app{{$i}}
     reqrep ^([^\ ]*\ /){{$path}}[/]?(.*)     \1\2{{range $c,$d:=service $a.Name}}
     server host{{$c}} {{.Address}}:{{.Port}} check{{end}}{{end}}{{end}}{{end}}
 
-listen stats *:1936
+listen stats
+    bind *:1936
     stats enable
     stats uri /
     stats hide-version
