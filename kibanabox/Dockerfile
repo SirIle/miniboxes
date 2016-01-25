@@ -1,8 +1,8 @@
 # Docker image to run Kibana on nginx
 FROM alpine
-MAINTAINER Ilkka Anttonen version: 0.4
+MAINTAINER Ilkka Anttonen version: 0.5
 
-ENV KIBANA_VERSION=4.1.0
+ENV KIBANA_VERSION=4.3.1
 
 # Install Kibana
 RUN ( mkdir /opt && \
